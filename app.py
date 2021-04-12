@@ -4,14 +4,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication
 import random
 import numpy as np
 
-class ag_estandar(QMainWindow):
-
-    def __init__(self):
-        super().__init__()
-        uic.loadUi("Interfaz.ui", self)
-        self.generacional.clicked.connect(self.evaluacionGeneracional)
-
-    class Cromosoma:
+class Cromosoma:
         genotype=''
         fenotype=''
         aptitud=''
@@ -27,6 +20,13 @@ class ag_estandar(QMainWindow):
 
         def __gt__(self, cromosoma):
             return self.aptitud > cromosoma.aptitud
+
+class ag_estandar(QMainWindow):
+
+    def __init__(self):
+        super().__init__()
+        uic.loadUi("Interfaz.ui", self)
+        self.generacional.clicked.connect(self.evaluacionGeneracional)
     
     def calculateFenotype_gray(self,genotype):
         aux_bin=genotype[0]
