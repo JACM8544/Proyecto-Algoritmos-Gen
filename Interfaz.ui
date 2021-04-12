@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>ngen_generacional</class>
+ <widget class="QMainWindow" name="ngen_generacional">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -40,7 +40,7 @@
      <rect>
       <x>60</x>
       <y>80</y>
-      <width>141</width>
+      <width>171</width>
       <height>16</height>
      </rect>
     </property>
@@ -53,36 +53,36 @@
      </font>
     </property>
     <property name="text">
-     <string>Representación Gray</string>
+     <string>Evaluación generacional</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>130</x>
       <y>110</y>
-      <width>111</width>
+      <width>16</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Tamaño de la población</string>
+     <string>f</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>50</x>
       <y>140</y>
-      <width>111</width>
+      <width>101</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Tamaño del cromosoma</string>
+     <string>Tamaño generación</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="t_pob_gray">
+   <widget class="QLineEdit" name="f_gen">
     <property name="geometry">
      <rect>
       <x>150</x>
@@ -92,7 +92,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="t_crom_gray">
+   <widget class="QLineEdit" name="t_pob_gen">
     <property name="geometry">
      <rect>
       <x>150</x>
@@ -105,17 +105,17 @@
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>45</x>
       <y>170</y>
-      <width>16</width>
-      <height>16</height>
+      <width>101</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>f</string>
+     <string>Tamaño cromosoma</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="f_gray">
+   <widget class="QLineEdit" name="rango_gen">
     <property name="geometry">
      <rect>
       <x>150</x>
@@ -125,17 +125,40 @@
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="gen_gray">
+   <widget class="QPushButton" name="generacional">
     <property name="geometry">
      <rect>
       <x>80</x>
-      <y>200</y>
+      <y>240</y>
       <width>75</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
      <string>Generar</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>200</y>
+      <width>71</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Generaciones</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="ngeneraciones">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>200</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
     </property>
    </widget>
   </widget>
