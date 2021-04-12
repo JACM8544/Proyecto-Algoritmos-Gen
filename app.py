@@ -9,6 +9,7 @@ class ag_estandar(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi("Interfaz.ui", self)
+        self.generacional.clicked.connect(self.evaluacionGeneracional)
 
     class Cromosoma:
         genotype=''
@@ -113,7 +114,11 @@ class ag_estandar(QMainWindow):
         ##
         return
 
-    def evaluacionGeneracional(self,tam_poblation,rango,generations,f):
+    def evaluacionGeneracional(self):
+        f='x**2'
+        tam_poblation=int(self.t_pob_gen.text())
+        rango=int(self.rango_gen.text())
+        generations=int(self.ngeneraciones.text())
         minimos=[]
         generation=generatePrimGen(tam_poblation,rango,f)
         minimos.append(peoresIndividuos(generation))
@@ -121,6 +126,7 @@ class ag_estandar(QMainWindow):
             nextgeneration=newGeneration(generation,f)
             minimos.append(peoresIndividuos(nextgeneration))
             generation=nextgeneration
+        print(minimos)
         return minimos
 
 #Abre la ventana gráfica
