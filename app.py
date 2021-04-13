@@ -48,8 +48,8 @@ class ag_estandar(QMainWindow):
     def generatePrimGen(self,len_poblation,len_cromosoma,f):
         poblation=[]
         for cromosoma in range(len_poblation):
-            genotype=generateGenotype_gray(len_cromosoma)
-            x=calculateFenotype_gray(genotype)
+            genotype=ag_estandar.generateGenotype_gray(self,len_cromosoma)
+            x=ag_estandar.calculateFenotype_gray(self,genotype)
             aptitud=eval(f)
             cromosoma=Cromosoma(genotype,x,aptitud)
             poblation.append(cromosoma)
@@ -81,7 +81,7 @@ class ag_estandar(QMainWindow):
         return spob[0]
 
     def newGeneration(self,poblation,f):
-        probaCruza(poblation)
+        ag_estandar.probaCruza(self,poblation)
         fathersnextgen=[]
         while len(fathersnextgen) < len(poblation):
             pemp=random.random()
@@ -95,10 +95,10 @@ class ag_estandar(QMainWindow):
         pcnextgen=random.random()
         if pcnextgen>0.7:
             return fathersnextgen
-        nextgen=cruza(fathersnextgen)
-        nextgen=mutacionbit(nextgen)
+        nextgen=ag_estandar.cruza(self,fathersnextgen)
+        nextgen=ag_estandar.mutacionbit(self,nextgen)
         for individuo in nextgen:
-            individuo.fenotype=calculateFenotype_gray(individuo.genotype)
+            individuo.fenotype=ag_estandar.calculateFenotype_gray(self,individuo.genotype)
             x=individuo.fenotype
             individuo.aptitud=eval(f)
         return nextgen
@@ -111,8 +111,7 @@ class ag_estandar(QMainWindow):
             individuo.pc=individuo.aptitud/sumpc
 
     def evalucionExtintiva(self,tam_poblation,rango):
-        ##
-        return
+        pass
 
     def evaluacionGeneracional(self):
         f='x**2'
@@ -120,11 +119,11 @@ class ag_estandar(QMainWindow):
         rango=int(self.rango_gen.text())
         generations=int(self.ngeneraciones.text())
         minimos=[]
-        generation=generatePrimGen(tam_poblation,rango,f)
-        minimos.append(peoresIndividuos(generation))
+        generation=ag_estandar.generatePrimGen(self,tam_poblation,rango,f)
+        minimos.append(ag_estandar.peoresIndividuos(self,generation))
         while len(minimos)<=generations:
-            nextgeneration=newGeneration(generation,f)
-            minimos.append(peoresIndividuos(nextgeneration))
+            nextgeneration=ag_estandar.newGeneration(self,generation,f)
+            minimos.append(ag_estandar.peoresIndividuos(self,nextgeneration))
             generation=nextgeneration
         print(minimos)
         return minimos
