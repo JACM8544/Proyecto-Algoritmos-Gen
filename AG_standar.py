@@ -49,7 +49,12 @@ def generatePrimGen(len_poblation,len_cromosoma,f):
 def cruza(fathers):
     nextgensons=[]
     for father in range(0,len(fathers),2):
-        pcorte=random.randint(1,len(fathers[father].genotype)-1)
+        longcrom=len(fathers[father].genotype)
+        if longcrom<3:
+            pcorte=1
+        else:
+            pcorte=random.randint(1,longcrom)
+            print("holllllllllla\n\n\n")
         #print(pcorte)
         son=Cromosoma(fathers[father].genotype[:pcorte] + fathers[father+1].genotype[pcorte:],'','')
         son2=Cromosoma(fathers[father+1].genotype[:pcorte] + fathers[father].genotype[pcorte:],'','')
@@ -117,8 +122,8 @@ def evaluacionGeneracional(tam_poblation,rango,generations,f):
 
 if __name__=='__main__':
     f='x**2'
-    first_gen_len=10
-    len_cromosoma=300
+    first_gen_len=4
+    len_cromosoma=4
     generations=15
     minimos=evaluacionGeneracional(first_gen_len,len_cromosoma,generations,f)
     for c in minimos:

@@ -1,8 +1,21 @@
 import sys
 from PyQt5 import uic
-from PyQt5.QtWidgets import QMainWindow, QApplication
-import random
 import numpy as np
+import matplotlib.pylab as plt
+import random
+
+from PyQt5 import QtCore, QtWidgets
+
+import matplotlib
+matplotlib.use('QT5Agg')
+
+from matplotlib.backends.backend_qt5agg import FigureCanvas 
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+
+from PyQt5.QtWidgets import QMainWindow, QApplication
+
+
+
 
 class Cromosoma:
         genotype=''
@@ -20,6 +33,9 @@ class Cromosoma:
 
         def __gt__(self, cromosoma):
             return self.aptitud > cromosoma.aptitud
+
+        def __le__(self,cromosoma):
+            return self.aptitud <= cromosoma.aptitud
 
 class ag_estandar(QMainWindow):
 
@@ -58,8 +74,10 @@ class ag_estandar(QMainWindow):
     def cruza(self,fathers):
         nextgensons=[]
         for father in range(0,len(fathers),2):
-            pcorte=random.randint(1,len(fathers[father].genotype)-1)
-            #print(pcorte)
+            if len(fathers[father].genotype)<3:
+                pcorte=1
+            else:
+                pcorte=random.randint(1,len(fathers[father].genotype)-1)
             son=Cromosoma(fathers[father].genotype[:pcorte] + fathers[father+1].genotype[pcorte:],'','')
             son2=Cromosoma(fathers[father+1].genotype[:pcorte] + fathers[father].genotype[pcorte:],'','')
             nextgensons.append(son)
@@ -78,7 +96,7 @@ class ag_estandar(QMainWindow):
     def peoresIndividuos(self,poblation):
         spob=poblation
         spob=sorted(spob)
-        return spob[0]
+        return [spob[0].fenotype, spob[0].genotype, spob[0].aptitud]
 
     def newGeneration(self,poblation,f):
         ag_estandar.probaCruza(self,poblation)
@@ -108,10 +126,56 @@ class ag_estandar(QMainWindow):
         for individuo in poblation:
             sumpc+=individuo.aptitud
         for individuo in poblation:
-            individuo.pc=individuo.aptitud/sumpc
+            if individuo.aptitud==0:
+                individuo.pc=0
+                continue
+            else:
+                individuo.pc=individuo.aptitud/sumpc
 
-    def evalucionExtintiva(self,tam_poblation,rango):
-        pass
+    def elitismo(fathers,sons):
+        listexitn=[]
+        for i in range(0,len(fathers)):
+            if sons[i]<=fathers[i]:
+                listexitn.append(sons[i])
+            else:
+                listexitn.append(fathers[i])
+        return listexitn
+
+    def dibujarFuncion(self,minimos,rango,f):
+        xcurve=np.arange(0,rango,0.5)
+        fig,axf=plt.subplots()
+        ymin=[]
+        xmin=[]
+        for individuo in minimos:
+            ymin.append(individuo[2])
+            xmin.append(individuo[0])
+        axf.plot(xcurve, [eval(f) for x in xcurve],'-',xmin,ymin,'o')
+
+        #plot
+
+        self.plotWidget = FigureCanvas(fig)
+        lay = QtWidgets.QVBoxLayout(self.content_plot)  
+        lay.setContentsMargins(0, 0, 0, 0)      
+        lay.addWidget(self.plotWidget)
+        self.addToolBar(QtCore.Qt.BottomToolBarArea, NavigationToolbar(self.plotWidget, self))
+
+    
+    def evalucionExtintiva(self):
+        f='x**2'
+        tam_poblation=int(self.t_pob_gen.text())
+        rango=int(self.rango_gen.text())
+        generations=int(self.ngeneraciones.text())
+        minimos=[]
+        generation=ag_estandar.generatePrimGen(self,tam_poblation,rango,f)
+        minimos.append(ag_estandar.peoresIndividuos(self,generation))
+        while len(minimos)<=generations:
+            nextgeneration=ag_estandar.newGeneration(self,generation,f)
+            minimos.append(ag_estandar.peoresIndividuos(self,nextgeneration))
+            nextgeneration=ag_estandar.elitismo(generation,nextgeneration)
+            generation=nextgeneration
+        for c in minimos:
+            c.mostrar()
+        return minimos
 
     def evaluacionGeneracional(self):
         f='x**2'
@@ -125,7 +189,10 @@ class ag_estandar(QMainWindow):
             nextgeneration=ag_estandar.newGeneration(self,generation,f)
             minimos.append(ag_estandar.peoresIndividuos(self,nextgeneration))
             generation=nextgeneration
-        print(minimos)
+        for c in minimos:
+            print(c)
+            #c.mostrar()
+        ag_estandar.dibujarFuncion(self,minimos,rango,f)
         return minimos
 
 #Abre la ventana gráfica

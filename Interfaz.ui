@@ -161,6 +161,19 @@
      </rect>
     </property>
    </widget>
+   <widget class="QWidget" name="content_plot" native="true">
+    <property name="geometry">
+     <rect>
+      <x>279</x>
+      <y>109</y>
+      <width>320</width>
+      <height>300</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-color: rgb(255, 0, 0);</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
