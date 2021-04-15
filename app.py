@@ -192,6 +192,7 @@ class ag_estandar(QMainWindow):
         for c in minimos:
             print(c)
             #c.mostrar()
+            self.resultados.addItem(str(c[0])+" - "+str(c[1])+" - "+str(c[2]))
         ag_estandar.dibujarFuncion(self,minimos,rango,f)
         return minimos
 
