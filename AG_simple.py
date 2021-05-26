@@ -3,6 +3,8 @@ from Funciones_seleccion import *
 from Funciones_Cruza import *
 from Funciones_Mutacion import *
 from Funciones_math import *
+import math
+import matplotlib.pyplot as plt
 
 import numpy as np
 import pandas as pd
@@ -39,12 +41,12 @@ def Generar_poblacion(num_poblacion, num_alelos, opc):
 
 if __name__ == "__main__":
 
-    st.title('Practica 1 Algoritmos Geneticos')
+    st.title('Practica 2 Algoritmos Geneticos')
     st.text('''Equipo: 
                 Contreras Mercado Jorge Armando
                 Jesús Eduardo Angeles Hernandez
                 Alexia Monserrat Rodríguez Peña
-Seleccion por ruleta, cruza por un punto y mutacion aleatoria''')
+Sobrante estocástico con reemplazo, Cruza por dos puntos y Mutación heurística''')
 
     
     CRUZA = 0.8
@@ -85,13 +87,13 @@ Seleccion por ruleta, cruza por un punto y mutacion aleatoria''')
     num_alelos = int(num_alelos)
     
     
-    opc_seleccion = 1
+    opc_seleccion = 3
     
     
-    opc_cruza = 1
+    opc_cruza = 2
 
 
-    opc_mutacion = 1
+    opc_mutacion = 5
     
     
     
@@ -102,7 +104,8 @@ Seleccion por ruleta, cruza por un punto y mutacion aleatoria''')
     # for ind in poblacion:
     #     print(ind.genotipo, ind.fenotipo, ind.aptitud)
         
-    
+    maximostotales=[]
+
     for i in range(num_generacion):
         
         st.write(f'''
@@ -283,10 +286,11 @@ Seleccion por ruleta, cruza por un punto y mutacion aleatoria''')
         for i in poblacion:
           aptitudes.append(i.aptitud)   
         
-        # print("Aptitud maxima local de población",max(aptitudes))
-        # print("Aptitud minima local de población",min(aptitudes))
+        #print("Aptitud maxima local de población",max(aptitudes))
+        #print("Aptitud minima local de población",min(aptitudes))
+        maximostotales.append(max(aptitudes))
 
-        # graficar(poblacion)
+        graficar(poblacion)
         
         col1, col2 = st.beta_columns(2)
         
@@ -307,5 +311,28 @@ Seleccion por ruleta, cruza por un punto y mutacion aleatoria''')
         
         random.shuffle(poblacion)
 
+    st.write(f'''
+                
+                Maximos obtenidos
+            
+              ''')
+    
+    arreglo_y = maximostotales
+    arreglo_x = [i for i in range(0,num_generacion)]
 
+    col1, col2 = st.beta_columns(2)
+        
+    with col1:
+        
+        df = pd.DataFrame(columns=['Aptitud'], index=range(0, num_generacion))
+            
+        for i in range(0, num_generacion):
+            df.iloc[i] = [maximostotales[i]]     
+
+        df
+            
+    with col2:
+            
+        st.line_chart(maximostotales, use_container_width=True)
+    
     
