@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 from matplotlib import colors
 
 import numpy as np
-import pandas as pd
 import streamlit as st 
 
 
@@ -26,9 +25,7 @@ def Generar_poblacion(num_poblacion, num_reinas):
         if i % num_reinas == 0:
 
             cromosoma.append(random.randint(1,num_reinas))
-
             ind = Individuo(cromosoma)
-            #ind.Generar_fenotipo()
             ind.Generar_Aptitud()
             poblacion.append(ind)
             cromosoma = []
@@ -58,30 +55,23 @@ def Seleccion_Torneo(poblacion):
     return seleccion
 
 def Cpunto(p1,p2):
-    
     x = random.randint(1, (len(p1)-1))
     h1 = [] 
     h2 = []
-    for i in range(x):
-        h1.append(p1[i]) 
-        h2.append(p2[i])
-    for n in range(x,len(p2)): 
-        h1.append(p2[n])
-        h2.append(p1[n])
+    h1=p1[:x]+p2[x:]
+    h2=p2[:x]+p1[x:]
     return h1, h2
 
 def Cruza_Punto(poblacion):
         
     Hijos = []
 
-    for i in range(len(poblacion)):
-        if i%2 == 0:
-            hijo1 = Individuo()
-            hijo2 = Individuo()
-            hijo1.genotipo, hijo2.genotipo = Cpunto(poblacion[i-1].genotipo, poblacion[i].genotipo)
-           
-            Hijos.append(hijo1)
-            Hijos.append(hijo2)
+    for i in range(0,len(poblacion),2):
+        hijo1 = Individuo()
+        hijo2 = Individuo()
+        hijo1.genotipo, hijo2.genotipo = Cpunto(poblacion[i].genotipo, poblacion[i+1].genotipo)
+        Hijos.append(hijo1)
+        Hijos.append(hijo2)
 
     return Hijos
 
@@ -90,8 +80,6 @@ def mutacion_scramble(ind):
     inf=random.randint(0,len(ind.genotipo)-1)
     sup=random.randint(inf,len(ind.genotipo)-1)
     random.shuffle(ind.genotipo[inf:sup:])
-    # for i in range(inf,sup):
-    #     ind.genotipo[i]=aux.pop()
     ind.Generar_Aptitud()
     
 def mejorIndividuo(poblation):
@@ -133,30 +121,8 @@ if __name__ == "__main__":
     CRUZA = 0.8
     MUTACION = 1-CRUZA
     
-    # opc = int(input('''
-
-    #         Selecciona la función (escribe número).
-
-    #         1. f(x) = x^2
-    #         2. f(X) = |(x-5)/2+sin(x)|
-    #         3. f(x) = (e^x - e^-x) 
-    # '''))
     st.sidebar.title('Parametros de generacion')
     
-    # opc = st.sidebar.selectbox('''
-
-    #         Selecciona la función fitness\n
-
-    #         1. f(x) = x^2\n
-    #         2. f(X) = |(x-5)/2+sin(x)|\n
-    #         3. f(x) = (e^x - e^-x) \n
-    # ''',
-    # (1,2,3)
-    # )
-
-    # num_poblacion = int(input("Número de población \n"))
-    # num_generacion =  int(input("Numero de Generaciones \n"))
-    # num_reinas =  int(input("Tamaño de los alelos \n"))
     
     num_poblacion = st.sidebar.text_input('Número de población: ',value='0')
     num_poblacion = int(num_poblacion)
@@ -171,8 +137,6 @@ if __name__ == "__main__":
     
     poblacion = Generar_poblacion(num_poblacion,num_reinas)
     
-    # for ind in poblacion:
-    #     print(ind.genotipo, ind.fenotipo, ind.aptitud)
         
     mejores=[]
 
@@ -183,10 +147,6 @@ if __name__ == "__main__":
 
         seleccion=Seleccion_Torneo(poblacion)
         
-        # print("Individuos seleccionados: ")
-        # for ind in seleccion:
-        #     print(ind.genotipo, ind.fenotipo, ind.aptitud)
-        
         Hijos = Cruza_Punto(seleccion)
  
 
@@ -195,20 +155,18 @@ if __name__ == "__main__":
         for ind in Hijos:
             ind.Generar_Aptitud() 
         
-        # st.write(f"Hijos de la generacion {i+1}")
-        # print(ind.genotipo, ind.fenotipo, ind.aptitud)
+        aux=[]
+        for i in range(0,len(Hijos)):
+            if seleccion[i].aptitud < Hijos[i].aptitud:
+                aux.append(seleccion[i])
+            else:
+                aux.append(Hijos[i])
 
-        # print(f"Mutantes de la generacion {i+1}")
-
-        poblacion = Hijos
-
-        #print("Aptitud maxima local de población",max(aptitudes))
-        #print("Aptitud minima local de población",min(aptitudes))
+        poblacion = aux
 
         mejor_gen=mejorIndividuo(poblacion)
         mejores.append(mejor_gen)
         if mejor_gen.aptitud==0:
-            print("ENCONTRADO")
             break
 
 
@@ -219,22 +177,14 @@ if __name__ == "__main__":
 
 
 
-            
-    #if solucion:
-
-
     if solucion.aptitud==0:
         st.write(f'''
-                    Solucion
+                    Solucion Encontrada!!!
                     ''')
     else:
         st.write(f'''
-                    Individuo mas cercano a la solucion
+                    Solución no encontrada: Mostrando individuo mas cercano a la solucion
                     ''')
-    print(solucion.aptitud)
-    print(solucion.genotipo)
-    for i in mejores:
-        print(i.aptitud)
     for col in range(0,len(solucion.genotipo)):
         fila=solucion.genotipo[col]-1
         tablero[fila][col]=2
@@ -243,11 +193,5 @@ if __name__ == "__main__":
     st.pyplot(fig)
 
 
-    # else:
-    #     st.write(f'''
-
-    #                 NO se encontro
-            
-    #               ''')
     
     
